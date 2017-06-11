@@ -1,6 +1,7 @@
 #include "HAPIH.h"
 
 
+
 HandleIH::~HandleIH() {
 	if(MainHandle) CloseHandle(MainHandle);
 }
@@ -112,15 +113,7 @@ PointerIH & PointerIH::operator-=(const size_t & rhs){
 	return *this;
 }
 
-inline PointerIH operator+(PointerIH lhs, const size_t & rhs) {
-	lhs += rhs;
-	return lhs;
-}
 
-inline PointerIH operator-(PointerIH lhs, const size_t & rhs) {
-	lhs -= rhs;
-	return lhs;
-}
 
 
 
@@ -291,10 +284,12 @@ void * HackIH::GetPointerAddress(const PointerIH & Pointer) const{
 		Addr = ReadAddr;
 		Addr += Pointer[i];
 	}
+	Addr += Pointer.GetAddend();
 	std::stringstream stream;
 	stream << "0x" << reinterpret_cast<void*>(Addr);
 	WriteLog("Pointer Read successfully, final address: " + stream.str());
 	return reinterpret_cast<void*>(Addr);
+}
 
 std::string HackIH::GetPointerOffset(const PointerIH & Pointer) const
 {

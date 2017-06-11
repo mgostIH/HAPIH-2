@@ -39,14 +39,14 @@ class PointerIH {
 private:
 	void* BaseAddr;
 	std::vector<std::size_t> Offsets;
-	std::size_t Addend;
+	std::size_t Addend=0;
 public:
 
 	PointerIH();
 	template<typename ... Off>
-	PointerIH(void* Address, Off... args) : BaseAddr(Address), Offsets{ static_cast<std::size_t>(args)... } {}
+	PointerIH(void* Address, Off... args) : BaseAddr(Address), Offsets{ static_cast<std::size_t>(args)... } { Addend = 0; }
 	template<typename ... Off>
-	PointerIH(std::size_t Address, Off... args) : BaseAddr(reinterpret_cast<void*>(Address)), Offsets{ static_cast<std::size_t>(args)... } {}
+	PointerIH(std::size_t Address, Off... args) : BaseAddr(reinterpret_cast<void*>(Address)), Offsets{ static_cast<std::size_t>(args)... } { Addend = 0; }
 
 	PointerIH(const PointerIH &rhs);
 	PointerIH(PointerIH && rhs);
@@ -70,6 +70,9 @@ public:
 
 
 };
+
+
+
 
 class HackIH {
 private:
@@ -134,3 +137,13 @@ public:
 };
 
 unsigned DJBHash(const std::vector<unsigned char> & vec);
+
+inline PointerIH operator+(PointerIH lhs, const size_t & rhs) {
+	lhs += rhs;
+	return lhs;
+}
+
+inline PointerIH operator-(PointerIH lhs, const size_t & rhs) {
+	lhs -= rhs;
+	return lhs;
+}
