@@ -86,7 +86,10 @@ int main() {
 }
 ```
 
-- After binding, the HackIH object is guaranteed access to the process and can now handle modules, memory spaces and operations.
+- After binding, the HackIH object is guaranteed access to the process and can now handle modules, memory spaces and operations, such as: 
+
+1. Reading
+    
 ```cpp
 #include "HAPIH.h"
 int main() {
@@ -101,7 +104,8 @@ int main() {
 	std::cin.get();
 }
 ```
-
+2. Writing 
+    
 ```cpp
 #include "HAPIH.h"
 int main() {
@@ -115,3 +119,13 @@ int main() {
 	std::cin.get();
 }
 ```
+
+
+## Other Features
+HAPIH 2 is able to perform DLL injection using the `.DllInject` and `.DllEject` functions, which work by spawning a thread on the needed kernel32.dll function, thus this feature only work for a target with the same bits as the compiled executable.
+
+Memory allocation, thread spawning and chunk memory I/O is also made available (`.ReadBytes` and `.WriteBytes`), a function for computing an hash of data inside a vector is also made available (`DJBHash`)
+
+## Todo
+Adding a binary searcher for the executable and some other memory manipulation functions.
+Also completing this readme since it's trash.
