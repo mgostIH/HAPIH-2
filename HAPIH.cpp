@@ -388,8 +388,18 @@ bool HackIH::DllInject(const std::string & FileName,bool UnloadAfterInjection) {
 		WriteLog("Couldn't resume thread, Error: "+ std::to_string(GetLastError()));
 		return false;
 	}
-	
-	auto WaitCode = WaitForSingleObject(Thread, INFINITE);	//Change the interval to whatever fits best to you
+	GetModulesInfo(ProcID);
+
+	auto n = FileName.rfind('\\');
+	auto InjectedAddr = GetModuleAddress(FileName.substr(n + 1));
+	if (!InjectedAddr) {
+		WriteLog("DLL isn't loaded inside process (It could have unloaded itself, unlikely)");
+		return false;
+	}
+
+	if (!UnloadAfterInjection) return true;
+
+	auto WaitCode = WaitForSingleObject(Thread, INFINITE);	
 	bool Finished = 0;
 	DWORD ThreadStatus = 0;
 	switch (WaitCode) {
@@ -409,17 +419,9 @@ bool HackIH::DllInject(const std::string & FileName,bool UnloadAfterInjection) {
 		WriteLog("The function has failed, Error: "+std::to_string(GetLastError()));
 		return false;
 	}
-	GetModulesInfo(ProcID);
-
-	auto n = FileName.rfind('\\');
-	auto InjectedAddr = GetModuleAddress(FileName.substr(n + 1));
-	if (!InjectedAddr) {
-		WriteLog("DLL isn't loaded inside process (It could have unloaded itself, unlikely)");
-		return false;
-	}
 	
 	if (!Finished) return true;
-	if (!UnloadAfterInjection) return true;
+	
 
 	
 	return DllEject(FileName);
