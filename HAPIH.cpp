@@ -279,19 +279,22 @@ void * HackIH::GetPointerAddress(const PointerIH & Pointer) const{
 	if(!isBound) return nullptr;
 	std::size_t Addr = reinterpret_cast<std::size_t>(Pointer.GetBase());
 	if (Pointer.size()) Addr += Pointer[0];
-	std::stringstream stream;
-	stream << "0x" <<  reinterpret_cast<void*>(Addr);
+	
 	for (int i = 1; i < Pointer.size(); i++) {
-		std::size_t ReadAddr;
+		std::size_t ReadAddr = Addr;
 		if (!ReadProcessMemory(ProcHandle, reinterpret_cast<void*>(Addr), &ReadAddr, sizeof(std::size_t), 0)) {
+			std::stringstream stream;
+			stream << "0x" << reinterpret_cast<void*>(Addr);
 			WriteLog("Failed reading memory (Error: "+std::to_string(GetLastError())+") at address: " + stream.str());
 			return nullptr;
 		}
+		Addr = ReadAddr;
 		Addr += Pointer[i];
 	}
+	std::stringstream stream;
+	stream << "0x" << reinterpret_cast<void*>(Addr);
 	WriteLog("Pointer Read successfully, final address: " + stream.str());
 	return reinterpret_cast<void*>(Addr);
-}
 
 std::string HackIH::GetPointerOffset(const PointerIH & Pointer) const
 {
