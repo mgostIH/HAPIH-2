@@ -42,11 +42,11 @@ private:
 	std::size_t Addend=0;
 public:
 
-	PointerIH();
+	PointerIH() : BaseAddr(0), Addend(0) {};
 	template<typename ... Off>
-	PointerIH(void* Address, Off... args) : BaseAddr(Address), Offsets{ static_cast<std::size_t>(args)... } { Addend = 0; }
+	PointerIH(void* Address, Off... args) : BaseAddr(Address), Offsets{ static_cast<std::size_t>(args)... }, Addend(0) {}
 	template<typename ... Off>
-	PointerIH(std::size_t Address, Off... args) : BaseAddr(reinterpret_cast<void*>(Address)), Offsets{ static_cast<std::size_t>(args)... } { Addend = 0; }
+	PointerIH(std::size_t Address, Off... args) : BaseAddr(reinterpret_cast<void*>(Address)), Offsets{ static_cast<std::size_t>(args)... }, Addend(0) {}
 
 	PointerIH(const PointerIH &rhs);
 	PointerIH(PointerIH && rhs);

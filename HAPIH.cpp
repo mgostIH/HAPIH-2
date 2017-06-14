@@ -87,10 +87,7 @@ PointerIH & PointerIH::operator=(PointerIH && rhs)
 }
 
 
-PointerIH::PointerIH(){
-	BaseAddr = 0;
-	Addend = 0;
-}
+
 
 PointerIH::PointerIH(const PointerIH & rhs){
 	BaseAddr = rhs.BaseAddr;
