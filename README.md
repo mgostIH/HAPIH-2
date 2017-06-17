@@ -30,7 +30,7 @@ int main() {
 }
 ```
 
--PointerIH supports final addition and substraction using the operators `+, -, +=, -=`, the final offset will be added **AFTER** the pointer is read from the process.
+- PointerIH supports final addition and substraction using the operators `+, -, +=, -=`, the final offset will be added **AFTER** the pointer is read from the process.
 ### HackIH
 Handles the entire API, it's responsible to do the direct memory operations, search for open processes and binding to them.
 
