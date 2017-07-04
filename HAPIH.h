@@ -83,8 +83,7 @@ private:
 	std::ostream * LogStream=0;
 	bool isBound=0;
 	void WriteLog(const std::string & Output) const;
-	void GetProcessesInfo();
-	void GetModulesInfo(DWORD PID);
+	
 public:
 
 	void* BaseAddress = 0;
@@ -95,11 +94,15 @@ public:
 	const std::string GetProcessName(const DWORD PID) const;
 	const DWORD GetProcessPID(const std::string ProcessName) const;
 
+
 	void SetDebugOutput(std::ostream & OutputStream);
 	void DisableLog();
 
-	void bind(DWORD PID);
-	void bind(std::string ProcessName);
+	void GetProcessesInfo();
+	void GetModulesInfo(DWORD PID);
+
+	bool bind(DWORD PID);
+	bool bind(std::string ProcessName);
 	const bool IsBound() const { return isBound; }
 
 	void* GetModuleAddress(const std::string & ModuleName) const;

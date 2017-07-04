@@ -86,9 +86,6 @@ PointerIH & PointerIH::operator=(PointerIH && rhs)
 	return *this;
 }
 
-
-
-
 PointerIH::PointerIH(const PointerIH & rhs){
 	BaseAddr = rhs.BaseAddr;
 	Addend = rhs.Addend;
@@ -230,24 +227,26 @@ void HackIH::DisableLog(){
 	LogStream = nullptr;
 }
 
-void HackIH::bind(DWORD PID) {
+bool HackIH::bind(DWORD PID) {
 	
 	GetModulesInfo(PID);
 	BaseAddress = GetModuleAddress(GetProcessName(PID));
 	if (!BaseAddress) {
 		isBound = 0;
 		WriteLog("Couldn't bind to process. (" + GetProcessName(PID) + ' ' + std::to_string(PID)+')');
-		return;
+		GetProcessesInfo();
+		return 0;
 	}
 	ProcHandle = PID;
 	if (!ProcHandle) WriteLog("OpenProcess failed with error " + std::to_string(ProcHandle.GetStatus()));
 	else WriteLog("Bound successfully to process. (" + GetProcessName(PID) + ' ' + std::to_string(PID) + ')');
 	isBound = static_cast<bool>(ProcHandle);
 	if (isBound) ProcID = PID;
+	return isBound;
 }
 
-void HackIH::bind(std::string ProcessName) {
-	bind(GetProcessPID(ProcessName));
+bool HackIH::bind(std::string ProcessName) {
+	return bind(GetProcessPID(ProcessName));
 }
 
 void* HackIH::GetModuleAddress(const std::string & ModuleName) const {
