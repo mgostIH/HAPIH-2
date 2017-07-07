@@ -30,7 +30,7 @@ int main() {
 }
 ```
 
--PointerIH supports final addition and substraction using the operators `+, -, +=, -=`, the final offset will be added **AFTER** the pointer is read from the process.
+- PointerIH supports final addition and substraction using the operators `+, -, +=, -=`, the final offset will be added **AFTER** the pointer is read from the process.
 ### HackIH
 Handles the entire API, it's responsible to do the direct memory operations, search for open processes and binding to them.
 
@@ -120,6 +120,28 @@ int main() {
 }
 ```
 
+3. DLL Injection
+```cpp
+#include "HAPIH.h"
+#include <iostream>
+int main(int argc,char** argv) {
+	SetConsoleTitle("DLL Injector");
+	if (argc < 2) { 
+		std::cout << "Invalid." << std::endl;
+		return 0;
+	}
+	std::string File = argv[1];
+	std::string Process;
+	if (argc == 3) Process = argv[2];
+	else Process = "GeometryDash.exe";
+	HackIH Injector;
+	do {
+		Sleep(250);
+	} while (!Injector.bind(Process));
+	Injector.DllInject(File, 0);
+	std::cout << "Injected." << std::endl;
+}
+```
 
 ## Other Features
 HAPIH 2 is able to perform DLL injection using the `.DllInject` and `.DllEject` functions, which work by spawning a thread on the needed kernel32.dll function, thus this feature only work for a target with the same bits as the compiled executable.
