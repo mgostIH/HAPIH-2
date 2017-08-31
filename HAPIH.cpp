@@ -111,12 +111,13 @@ PointerIH & PointerIH::operator-=(const size_t & rhs){
 
 
 
-void HackIH::WriteLog(const std::string & Output) const{	
-	if (LogStream) {
-		std::time_t time = std::time(0);
-		auto TimeStruct = std::localtime(&time);
-		*LogStream << '[' << std::setw(2)<<std::setfill('0')<<std::to_string(TimeStruct->tm_hour) << ':' << std::setw(2) << std::setfill('0') << std::to_string(TimeStruct->tm_min) << ':' << std::setw(2) << std::setfill('0') << std::to_string(TimeStruct->tm_sec) << ']' <<' '<< Output<<'\n';
-	}
+void HackIH::WriteLog(const std::string & Output) const{    
+    if (LogStream) {
+        std::time_t time = std::time(0);
+        std::tm TimeStruct = { 0 };
+        if (localtime_s(&TimeStruct, &time) == 0) *LogStream << '[' << std::setw(2) << std::setfill('0') << std::to_string(TimeStruct.tm_hour) << ':' << std::setw(2) << std::setfill('0') << std::to_string(TimeStruct.tm_min) << ':' << std::setw(2) << std::setfill('0') << std::to_string(TimeStruct.tm_sec) << ']' << ' ' << Output << '\n';
+        else *LogStream << Output << '\n';
+    }
 }
 
 void HackIH::GetProcessesInfo() {
